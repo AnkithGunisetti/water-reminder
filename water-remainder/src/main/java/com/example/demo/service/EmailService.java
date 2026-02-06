@@ -29,7 +29,7 @@ public class EmailService {
             conn.setDoOutput(true);
 
             String json = "{"
-                    + "\"sender\":{\"email\":\"ankithkumar0301@gmail.com\"},"
+                    + "\"sender\":{\"email\":\"ankithgunisetti@gmail.com\"},"
                     + "\"to\":[{\"email\":\"" + toEmail + "\"}],"
                     + "\"subject\":\"Water Reminder 💧\","
                     + "\"textContent\":\"Time to drink water! Stay hydrated.\""
