@@ -13,14 +13,15 @@ public class EmailService {
 
     public void sendReminderEmail(String toEmail) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
+    	 SimpleMailMessage message = new SimpleMailMessage();
 
-        message.setTo(toEmail);
-        message.setSubject("Water Reminder");
-        message.setText("Time to drink water! Stay hydrated.");
+         message.setFrom("ankithgunisetti@gmail.com");  // VERIFIED sender
+         message.setTo(toEmail);
+         message.setSubject("Water Reminder 💧");
+         message.setText("Time to drink water!");
 
-        mailSender.send(message);
+         mailSender.send(message);
 
-        System.out.println("Email sent to: " + toEmail);
+         System.out.println("Email sent to: " + toEmail);
     }
 }
