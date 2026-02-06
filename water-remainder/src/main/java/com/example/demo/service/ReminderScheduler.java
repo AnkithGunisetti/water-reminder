@@ -1,12 +1,12 @@
 package com.example.demo.service;
 
+import com.example.demo.model.User;
+import com.example.demo.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.example.demo.model.User;
-import com.example.demo.repository.*;
-
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Component
@@ -18,58 +18,43 @@ public class ReminderScheduler {
     @Autowired
     private EmailService emailService;
 
-    private void sendReminderToAllUsers(String time) {
+    // This method sends email to all registered users
+    public void sendReminderToAllUsers(String reminderTime) {
 
-        System.out.println("Sending reminder for time: " + time);
+        System.out.println("Sending reminder for time: " + reminderTime);
+        System.out.println("Current IST time: " + LocalDateTime.now());
 
         List<User> users = userRepository.findAll();
 
+        if (users.isEmpty()) {
+            System.out.println("No users registered.");
+            return;
+        }
+
         for (User user : users) {
 
-            emailService.sendReminderEmail(user.getEmail());
+            try {
+                emailService.sendReminderEmail(user.getEmail());
+                System.out.println("Email sent to: " + user.getEmail());
 
+            } catch (Exception e) {
+
+                System.out.println("Failed to send email to: " + user.getEmail());
+                e.printStackTrace();
+
+            }
         }
     }
 
-    // 8 AM
-    @Scheduled(cron = "0 0 8 * * ?")
-    public void reminder8AM() {
-        sendReminderToAllUsers("8 AM");
+    // Scheduler runs at fixed IST times
+    @Scheduled(
+            cron = "0 0 8,10,12,14,16,18,20 * * ?",
+            zone = "Asia/Kolkata"
+    )
+    public void sendDailyReminders() {
+
+        sendReminderToAllUsers("Scheduled Reminder");
+
     }
 
-    // 10 AM
-    @Scheduled(cron = "0 0 10 * * ?")
-    public void reminder10AM() {
-        sendReminderToAllUsers("10 AM");
-    }
-
-    // 12 PM
-    @Scheduled(cron = "0 0 12 * * ?")
-    public void reminder12PM() {
-        sendReminderToAllUsers("12 PM");
-    }
-
-    // 2 PM
-    @Scheduled(cron = "0 0 14 * * ?")
-    public void reminder2PM() {
-        sendReminderToAllUsers("2 PM");
-    }
-
-    // 4 PM
-    @Scheduled(cron = "0 0 16 * * ?")
-    public void reminder4PM() {
-        sendReminderToAllUsers("4 PM");
-    }
-
-    // 6 PM
-    @Scheduled(cron = "0 0 18 * * ?")
-    public void reminder6PM() {
-        sendReminderToAllUsers("6 PM");
-    }
-
-    // 8 PM
-    @Scheduled(cron = "0 0 20 * * ?")
-    public void reminder8PM() {
-        sendReminderToAllUsers("8 PM");
-    }
 }
